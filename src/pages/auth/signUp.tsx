@@ -1,19 +1,34 @@
 import Layout from "@/components/layout";
 import Field from "@/ui/form/field";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-
+import Link from "next/link";
+import apiUrl from "@/config/api";
+import {UserContext} from "@/lib/UserContext";
+import Router from 'next/router'
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [user, setUser] = useContext(UserContext);
+
+  const validateForm = (): boolean => {
+    if (password !== repeatPassword) {
+      toast.error("Passwords do not match");
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try {
       const response = await axios.post(
-        "http://localhost:8082/v1/user/login",
+        apiUrl + "user/register",
         {
           username,
           password,
@@ -27,9 +42,11 @@ const Login = () => {
       );
       if (response.status === 200) {
         toast.success("Register success");
+        setUser({username: username, accessToken: response.data.access_token});
+        await Router.push("/")
       }
     } catch (error: any) {
-      if (error.response.status === 401) {
+      if (error.response.status === 400) {
         toast.error(error.response.data.message);
       } else {
         toast.error("an error occurred");
@@ -47,7 +64,7 @@ const Login = () => {
               <div className="flex flex-col gap-4 p-4 md:p-8">
                 <div>
                   <Field
-                    attribute="email"
+                    attribute="username"
                     value={username}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)}
                     required={true}/>
@@ -79,9 +96,10 @@ const Login = () => {
 
               <div className="flex items-center justify-center bg-gray-100 p-4">
                 <p className="text-center text-sm text-gray-500">
-                  Don&lsquo;t have an account?
-                  <a href="#"
-                     className="text-indigo-500 transition duration-100 hover:text-indigo-600 active:text-indigo-700">Register</a>
+                  Have an account?
+                  <Link
+                    href="/auth/login"
+                     className="text-indigo-500 transition duration-100 hover:text-indigo-600 active:text-indigo-700"> Login</Link>
                 </p>
               </div>
             </form>

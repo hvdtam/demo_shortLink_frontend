@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, {useState} from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import apiUrl from "@/config/api";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -12,7 +13,7 @@ const Login = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8082/v1/user/login",
+        apiUrl + "/user/login",
         {
           username,
           password,
@@ -26,7 +27,7 @@ const Login = () => {
       if (response.status === 200) {
         toast.success("Login success");
       }
-    } catch (error : any) {
+    } catch (error: any) {
       if (error.response.status === 401) {
         toast.error(error.response.data.message);
       } else {

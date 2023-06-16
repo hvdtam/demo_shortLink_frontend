@@ -3,6 +3,7 @@ import Field from "@/ui/form/field";
 import Dropdown from "@/ui/form/dropdown";
 import React, { useState } from "react";
 import axios from "axios";
+import apiUrl from "@/config/api";
 
 const HomePage = () => {
   const [longUrl, setLongUrl] = useState("");
@@ -22,7 +23,7 @@ const HomePage = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8082/v1/shortlink",
+        apiUrl + "shortlink",
         {
           longUrl,
           aliasUrl,
