@@ -1,7 +1,41 @@
 import Layout from "@/components/layout";
 import Field from "@/ui/form/field";
+import React, {useState} from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:8082/v1/user/login",
+        {
+          username,
+          password,
+          repeatPassword,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Register success");
+      }
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("an error occurred");
+      }
+    }
+  }
   return (
     <>
       <Layout>
@@ -9,18 +43,32 @@ const Login = () => {
           <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
             <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl">Sign Up</h2>
 
-            <form className="mx-auto max-w-lg rounded-lg border">
+            <form className="mx-auto max-w-lg rounded-lg border" onSubmit={handleSubmit}>
               <div className="flex flex-col gap-4 p-4 md:p-8">
                 <div>
-                  <Field attribute="email" required={true}/>
+                  <Field
+                    attribute="email"
+                    value={username}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)}
+                    required={true}/>
                 </div>
 
                 <div>
-                  <Field attribute="password" required={true}/>
+                  <Field
+                    attribute="password"
+                    value={password}
+                    type="password"
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)}
+                    required={true}/>
                 </div>
 
                 <div>
-                  <Field attribute="repeatPassword" required={true}/>
+                  <Field
+                    attribute="repeatPassword"
+                    type="password"
+                    value={repeatPassword}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRepeatPassword(event.target.value)}
+                    required={true}/>
                 </div>
 
                 <button

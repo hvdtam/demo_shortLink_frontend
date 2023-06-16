@@ -1,11 +1,16 @@
 import React from 'react';
 import Link from "next/link";
+import {useRouter} from "next/router";
+import _ from "lodash";
 
 const Header = () => {
+  const router = useRouter()
+  const title = router.asPath == '/' ? 'Home' : _.startCase(router.asPath)
   return (
     <div className="bg-white lg:pb-12">
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
         <header className="flex items-center justify-between py-4 md:py-8">
+          <title>{title}</title>
           <Link
             href="/"
             className="text-black-800 inline-flex items-center gap-2.5 text-2xl font-bold md:text-3xl"
