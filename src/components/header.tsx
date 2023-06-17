@@ -1,13 +1,21 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Link from "next/link";
 import {useRouter} from "next/router";
 import _ from "lodash";
-import {UserContext} from "@/lib/UserContext";
 
 const Header = () => {
   const router = useRouter()
-  const [user, setUser] = useContext(UserContext);
-  const title = router.asPath == '/' ? 'Home' : _.startCase(router.asPath)
+  const [accessToken, setAccessToken] = useState("")
+
+  useEffect(() => {
+    let storage = window.localStorage.getItem('accessToken')
+    if(storage != null) {
+      setAccessToken(storage)
+    } else {
+      // console.log('storage', storage)
+    }
+  }, [])
+  const title = router.asPath == '/' || router.asPath == '/#' ? 'Home' : _.startCase(router.asPath)
   return (
     <div className="bg-white lg:pb-12">
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
@@ -26,11 +34,11 @@ const Header = () => {
 
           <div
             className="-ml-8 hidden flex-col gap-2.5 sm:flex-row sm:justify-center lg:flex lg:justify-start">
-            {user.username ? (
+            {accessToken ? (
               <>
                 <nav className="hidden gap-12 lg:flex">
-                  <a href="#" className="inline-flex items-center gap-1">
-                    Hi <span className="text-blue-500 font-semibold"> {user.username}</span>
+                  <Link href="/" className="inline-flex items-center gap-1">
+                    Hi <span className="text-blue-500 font-semibold"> tamk</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 text-gray-800" viewBox="0 0 20 20"
@@ -40,29 +48,9 @@ const Header = () => {
                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                         clipRule="evenodd"/>
                     </svg>
-                  </a>
+                  </Link>
                 </nav>
                 <div className="p-10">
-
-                  <div className="dropdown inline-block relative">
-                    <button
-                      className="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center">
-                      <span className="mr-1">Dropdown</span>
-                      <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                      </svg>
-                    </button>
-                    <ul className="dropdown-menu absolute hidden text-gray-700 pt-1">
-                      <li className=""><a
-                        className="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
-                        href="#">One</a></li>
-                      <li className=""><a className="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
-                                          href="#">Two</a></li>
-                      <li className=""><a
-                        className="rounded-b bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="#">Three
-                        is the magic number</a></li>
-                    </ul>
-                  </div>
 
                 </div>
               </>

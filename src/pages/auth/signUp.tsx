@@ -5,13 +5,11 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import apiUrl from "@/config/api";
-import {UserContext} from "@/lib/UserContext";
 import Router from 'next/router'
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-  const [user, setUser] = useContext(UserContext);
 
   const validateForm = (): boolean => {
     if (password !== repeatPassword) {
@@ -42,7 +40,7 @@ const Login = () => {
       );
       if (response.status === 200) {
         toast.success("Register success");
-        setUser({username: username, accessToken: response.data.access_token});
+        window.localStorage.setItem('accessToken', response.data.access_token)
         await Router.push("/")
       }
     } catch (error: any) {

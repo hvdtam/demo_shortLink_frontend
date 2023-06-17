@@ -26,6 +26,7 @@ const Login = () => {
       );
       if (response.status === 200) {
         toast.success("Login success");
+        window.localStorage.setItem('accessToken', response.data.access_token)
       }
     } catch (error: any) {
       if (error.response.status === 401) {
