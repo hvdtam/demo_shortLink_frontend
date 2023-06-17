@@ -13,6 +13,14 @@ const Login = () => {
   const [repeatPassword, setRepeatPassword] = useState("");
 
   const validateForm = (): boolean => {
+    if (username.length < 4) {
+      toast.error("Username is too short");
+      return false;
+    }
+    if (username.length > 25) {
+      toast.error("Username is too long");
+      return false;
+    }
     if (password !== repeatPassword) {
       toast.error("Passwords do not match");
       return false;

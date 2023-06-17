@@ -11,7 +11,6 @@ import {configApi} from "@/config/configApi";
 import {trimValue} from "@/helper/data";
 import {shortlinkData} from "@/models/interface/shortlink";
 
-
 const HomePage = () => {
   const [longUrl, setLongUrl] = useState("");
   const [aliasUrl, setAliasUrl] = useState("");
@@ -29,11 +28,14 @@ const HomePage = () => {
     {key: 604800, value: '1 week'},
     {key: 2629743, value: '1 month'},
   ];
+
   const fetchShortLink = async () => {
     try {
       const response = await axios.get(apiUrl + "shortlink/?sortby=id&order=desc", configApi);
       if (response.status === 200) {
-        setData([...response.data.data]);
+        setData(response.data);
+      } else {
+        setData([]);
       }
     } catch (error) {
       console.error(error);
@@ -66,12 +68,7 @@ const HomePage = () => {
           aliasUrl,
           password,
           expire: parseInt(expire),
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        }, configApi
       );
       if (response.status === 201) {
         toast.success("Created ShortLink success");
@@ -95,7 +92,6 @@ const HomePage = () => {
   };
   return (
     <Layout>
-
       <div className="bg-white py-6 sm:py-8 lg:py-12">
         <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
           <form className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-3" onSubmit={handleSubmit}>
@@ -187,5 +183,6 @@ const HomePage = () => {
     </Layout>
   );
 };
+
 
 export default HomePage;
