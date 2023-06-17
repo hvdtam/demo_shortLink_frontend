@@ -1,5 +1,6 @@
 import {QRCodeCanvas} from "qrcode.react";
 import {asFutureTime, asRelativeTime} from "@/helper/date";
+import toast from "react-hot-toast";
 
 interface shortLinkData {
   id: number;
@@ -41,11 +42,6 @@ const Modal = ({showModal, selectedShortLink, onClose}: Props) => {
                 <p className="text-sm leading-5 text-gray-500 mb-4">
                   <span className="font-bold">Original Url: </span>{selectedShortLink.longUrl}
                   <br/>
-                  <span className="font-bold">Short Url: </span>
-                  <a href={selectedShortLink.aliasUrl} className="text-blue-400">
-                    {selectedShortLink.aliasUrl}
-                  </a>
-                  <br/>
                   <span className="font-bold">Created At: </span>{asRelativeTime(selectedShortLink.createdAt)}
                   <br/>
                   <span
@@ -55,6 +51,26 @@ const Modal = ({showModal, selectedShortLink, onClose}: Props) => {
                 ) : "Not expire"}
                 </p>
                 <QRCodeCanvas value={selectedShortLink.aliasUrl}/>
+                <br/>
+                <p style={{display: "flex", alignItems: "center"}}>
+                  <span className="font-bold">Short Url: &nbsp;</span>
+                  <a href={selectedShortLink.aliasUrl} className="text-blue-400">
+                    {selectedShortLink.aliasUrl}
+                  </a>
+                  <button onClick={() => {
+                    navigator.clipboard.writeText(selectedShortLink.aliasUrl).then(() => {
+                      toast.success("Copied to clipboard");
+                    })
+                  }}
+                          style={{marginLeft: "10px"}}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                         className="feather feather-copy">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  </button>
+                </p>
               </>
             )}
           </div>
