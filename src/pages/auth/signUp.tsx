@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import apiUrl from "@/config/api";
 import Router from 'next/router'
+import {trimValue} from "@/helper/data";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,6 +15,10 @@ const Login = () => {
   const validateForm = (): boolean => {
     if (password !== repeatPassword) {
       toast.error("Passwords do not match");
+      return false;
+    }
+    if (password.length < 4) {
+      toast.error("Passwords is too short");
       return false;
     }
     return true;
@@ -64,7 +69,7 @@ const Login = () => {
                   <Field
                     attribute="username"
                     value={username}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setUsername(trimValue(event.target.value))}
                     required={true}/>
                 </div>
 

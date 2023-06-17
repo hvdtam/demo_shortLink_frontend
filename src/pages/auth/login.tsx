@@ -5,6 +5,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import apiUrl from "@/config/api";
+import {trimValue} from "@/helper/data";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -50,7 +51,7 @@ const Login = () => {
                     attribute="email"
                     required={true}
                     value={username}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)}/>
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setUsername(trimValue(event.target.value))}/>
                 </div>
 
                 <div>
@@ -58,7 +59,7 @@ const Login = () => {
                     attribute="password"
                     required={true}
                     value={password}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)}/>
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword(trimValue(event.target.value))}/>
                 </div>
 
                 <button

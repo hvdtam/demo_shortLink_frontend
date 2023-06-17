@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import {QRCodeCanvas} from 'qrcode.react';
 import Modal from "@/ui/modal";
 import {configApi} from "@/config/configApi";
+import {trimValue} from "@/helper/data";
 
 interface shortlinkData {
   id: number;
@@ -116,7 +117,7 @@ const HomePage = () => {
                 attribute="longLink"
                 required={true}
                 value={longUrl}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setLongUrl(event.target.value)}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setLongUrl(trimValue(event.target.value))}
               />
             </div>
             <div>
@@ -126,7 +127,7 @@ const HomePage = () => {
                 required={false}
                 placeholder={"If empty, generate randomly"}
                 value={aliasUrl}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setAliasUrl(event.target.value)}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setAliasUrl(trimValue(event.target.value))}
               />
             </div>
             <div>
