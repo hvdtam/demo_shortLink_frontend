@@ -86,7 +86,6 @@ const HomePage = () => {
       );
       if (response.status === 201) {
         toast.success("Created ShortLink success");
-        window.localStorage.setItem('accessToken', response.data.access_token)
         await fetchShortLink();
         setLongUrl("")
         setAliasUrl("")

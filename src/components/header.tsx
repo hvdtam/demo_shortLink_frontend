@@ -2,15 +2,19 @@ import React, {useContext, useEffect, useState} from 'react';
 import Link from "next/link";
 import {useRouter} from "next/router";
 import _ from "lodash";
-
+import jwt_decode from "jwt-decode";
 const Header = () => {
   const router = useRouter()
   const [accessToken, setAccessToken] = useState("")
+  const [user, setUser] = useState("")
 
   useEffect(() => {
     let storage = window.localStorage.getItem('accessToken')
     if (storage != null) {
       setAccessToken(storage)
+      // @ts-ignore
+      const username = jwt_decode(storage).username
+      setUser(username)
     } else {
       // console.log('storage', storage)
     }
@@ -38,7 +42,7 @@ const Header = () => {
               <>
                 <nav className="hidden gap-12 lg:flex">
                   <Link href="/" className="inline-flex items-center gap-1">
-                    Hi <span className="text-blue-500 font-semibold"> tamk</span>
+                    Hi <span className="text-blue-500 font-semibold"> {user}</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 text-gray-800" viewBox="0 0 20 20"

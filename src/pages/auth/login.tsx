@@ -6,6 +6,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import apiUrl from "@/config/api";
 import {trimValue} from "@/helper/data";
+import Router from "next/router";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -27,6 +28,7 @@ const Login = () => {
       );
       if (response.status === 200) {
         toast.success("Login success");
+        await Router.push("/")
         window.localStorage.setItem('accessToken', response.data.access_token)
       }
     } catch (error: any) {
