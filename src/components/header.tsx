@@ -1,14 +1,17 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import Link from "next/link";
 import {useRouter} from "next/router";
 import _ from "lodash";
 import jwt_decode from "jwt-decode";
+
 const Header = () => {
   const router = useRouter()
   const [accessToken, setAccessToken] = useState("")
   const [user, setUser] = useState("")
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
+    setShowDropdown(false)
     let storage = window.localStorage.getItem('accessToken')
     if (storage != null) {
       setAccessToken(storage)
@@ -19,6 +22,17 @@ const Header = () => {
       // console.log('storage', storage)
     }
   }, [])
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    if (showDropdown) {
+      timeout = setTimeout(() => {
+        setShowDropdown(false);
+      }, 3000);
+
+      return () => clearTimeout(timeout);
+    }
+  })
   const title = router.asPath == '/' || router.asPath == '/#' ? 'Home' : _.startCase(router.asPath)
   return (
     <div className="bg-white lg:pb-12">
@@ -41,22 +55,43 @@ const Header = () => {
             {accessToken ? (
               <>
                 <nav className="hidden gap-12 lg:flex">
-                  <Link href="/" className="inline-flex items-center gap-1">
-                    Hi <span className="text-blue-500 font-semibold"> {user}</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-800" viewBox="0 0 20 20"
-                      fill="currentColor">
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"/>
-                    </svg>
-                  </Link>
-                </nav>
-                <div className="p-10">
+                  <div className="relative dropdown">
+                    <Link href="/" className="inline-flex items-center gap-1" onClick={() => {
+                      setShowDropdown(true)
+                    }}>
+                      Hi <span className="text-blue-500 font-semibold">{user}</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 text-gray-800" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path
+                          fillRule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          clipRule="evenodd"/>
+                      </svg>
+                    </Link>
 
-                </div>
+                    <div
+                      className={`absolute right-0 z-10 mt-2 w-56 divide-y divide-gray-100 rounded-md border border-gray-100 bg-white shadow-lg dropdown-menu `
+                        + (showDropdown ? 'block' : 'hidden')}
+                      role="menu">
+                      <div className="p-2">
+                        <a href="#"
+                           className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                           role="menuitem">
+                          Manage Shortlinks
+                        </a>
+                      </div>
+                      <div className="p-2">
+                        <Link href="/auth/logout"
+                           className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                           role="menuitem">
+                          Sign out
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </nav>
               </>
             ) : (
               <>

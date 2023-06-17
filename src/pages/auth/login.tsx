@@ -60,6 +60,7 @@ const Login = () => {
                   <Field
                     attribute="password"
                     required={true}
+                    type="password"
                     value={password}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword(trimValue(event.target.value))}/>
                 </div>
