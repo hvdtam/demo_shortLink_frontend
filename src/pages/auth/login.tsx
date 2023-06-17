@@ -50,7 +50,7 @@ const Login = () => {
               <div className="flex flex-col gap-4 p-4 md:p-8">
                 <div>
                   <Field
-                    attribute="email"
+                    attribute="username"
                     required={true}
                     value={username}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => setUsername(trimValue(event.target.value))}/>

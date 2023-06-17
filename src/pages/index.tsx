@@ -9,19 +9,8 @@ import {QRCodeCanvas} from 'qrcode.react';
 import Modal from "@/ui/modal";
 import {configApi} from "@/config/configApi";
 import {trimValue} from "@/helper/data";
+import {shortlinkData} from "@/models/interface/shortlink";
 
-interface shortlinkData {
-  id: number;
-  longUrl: string;
-  aliasUrl: string;
-  password: string;
-  status: number;
-  expire: number;
-  totalClick: number;
-  createdAt: number;
-  createdBy: number;
-  updatedAt: number;
-}
 
 const HomePage = () => {
   const [longUrl, setLongUrl] = useState("");
@@ -42,9 +31,9 @@ const HomePage = () => {
   ];
   const fetchShortLink = async () => {
     try {
-      const response = await axios.get(apiUrl + "shortlink", configApi);
+      const response = await axios.get(apiUrl + "shortlink/?sortby=id&order=desc", configApi);
       if (response.status === 200) {
-        setData(response.data);
+        setData([...response.data.data]);
       }
     } catch (error) {
       console.error(error);
