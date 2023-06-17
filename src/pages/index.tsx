@@ -1,17 +1,36 @@
 import Layout from "@/components/layout";
 import Field from "@/ui/form/field";
 import Dropdown from "@/ui/form/dropdown";
-import React, {createContext, useContext, useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import axios from "axios";
 import apiUrl from "@/config/api";
 import toast from "react-hot-toast";
 import Router from "next/router";
+import ReactDOM from 'react-dom';
+import {QRCodeCanvas} from 'qrcode.react';
+import Modal from "@/ui/modal";
+
+interface shortlinkData {
+  id: number;
+  longUrl: string;
+  aliasUrl: string;
+  password: string;
+  status: number;
+  expire: number;
+  totalClick: number;
+  createdAt: number;
+  createdBy: number;
+  updatedAt: number;
+}
 
 const HomePage = () => {
   const [longUrl, setLongUrl] = useState("");
   const [aliasUrl, setAliasUrl] = useState("");
   const [password, setPassword] = useState("");
   const [expire, setExpire] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedShortLink, setSelectedShortLink] = useState<shortlinkData | null>(null);
+  const [data, setData] = useState<shortlinkData[]>([]);
   const options = [
     {key: 3600, value: '1 hour'},
     {key: 10800, value: '3 hours'},
@@ -21,13 +40,42 @@ const HomePage = () => {
     {key: 604800, value: '1 week'},
     {key: 2629743, value: '1 month'},
   ];
+  useEffect(() => {
+
+    setData([
+      {
+        "id": 6,
+        "longUrl": "231321123123132",
+        "aliasUrl": "xnfbsdo6av",
+        "password": "",
+        "status": 10,
+        "expire": 0,
+        "totalClick": 0,
+        "createdAt": 1686969171,
+        "createdBy": 0,
+        "updatedAt": 0
+      },
+      {
+        "id": 7,
+        "longUrl": "231321123123132",
+        "aliasUrl": "2321",
+        "password": "",
+        "status": 10,
+        "expire": 0,
+        "totalClick": 0,
+        "createdAt": 1686969486,
+        "createdBy": 0,
+        "updatedAt": 0
+      }
+    ]);
+  }, []);
   const validateForm = (): boolean => {
-    if (longUrl.length < 5 ) {
+    if (longUrl.length < 5) {
       toast.error("Long link is too short");
       return false;
     }
-    if (longUrl.length > 250 ) {
-      toast.error("Long link is too long");
+    if (longUrl.length > 250) {
+      toast.error("Original link is too long");
       return false;
     }
     return true;
@@ -64,6 +112,14 @@ const HomePage = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedShortLink(null);
+  };
+  const handleClickShortLink = (item: shortlinkData) => {
+    setSelectedShortLink(item);
+    setShowModal(true);
   };
   return (
     <Layout>
@@ -118,27 +174,44 @@ const HomePage = () => {
             </div>
           </form>
           <>
-            <div className="container flex justify-center mx-auto w-3/4">
-              <div className="bg-white rounded shadow lg:w-1/3">
-                <ul className="divide-y divide-gray-100">
-                  <li className="p-3 hover:bg-blue-600 hover:text-blue-200 rounded">
-                    List Item 1
-                  </li>
-                  <li className="p-3 hover:bg-blue-600 hover:text-blue-200 rounded">
-                    List Item 2
-                  </li>
-                  <li className="p-3 hover:bg-blue-600 hover:text-blue-200 rounded">
-                    List Item 3
-                  </li>
-                  <li className="p-3 hover:bg-blue-600 hover:text-blue-200 rounded">
-                    List Item 4
-                  </li>
+            <div className="my-3">
+              <div className="md:mb-5">
+                <h2 className="mb-4 text-xl font-bold text-gray-800 md:mb-6 lg:text-2xl">
+                  My list ShortLink
+                </h2>
+              </div>
+              <div className="w-full bg-white rounded-lg shadow-lg">
+                <ul className="divide-y-2 divide-gray-100">
+                  {data.map((item) => (
+                    <li
+                      key={item.id}
+                      className="p-3 hover:bg-blue-400 hover:text-blue-200 rounded"
+                      onClick={() => handleClickShortLink(item)}
+                    >
+                      <div className="flex items-center">
+                        <div className="flex-grow">
+                          <div className="flex flex-col">
+                            <span className="text-xs text-gray-500">
+                              <span className="font-bold">Original Url: </span> {item.longUrl}
+                            </span>
+                            <span className="text-sm text-gray-800">
+                              <span className="font-bold">Short Url</span>: {item.aliasUrl}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex justify-end">
+                          <QRCodeCanvas className="h-10 w-10" value={item.aliasUrl}/>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
           </>
         </div>
       </div>
+      {showModal && (<Modal showModal={showModal} selectedShortLink={selectedShortLink} onClose={handleCloseModal}/>)}
     </Layout>
   );
 };
