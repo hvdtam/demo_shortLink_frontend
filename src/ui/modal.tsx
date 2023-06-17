@@ -1,4 +1,5 @@
 import {QRCodeCanvas} from "qrcode.react";
+import {asFutureTime, asRelativeTime} from "@/helper/date";
 
 interface shortLinkData {
   id: number;
@@ -38,9 +39,20 @@ const Modal = ({showModal, selectedShortLink, onClose}: Props) => {
               <>
                 <h3 className="text-lg leading-6 font-medium text-gray-900 mb-2">ShortLink details</h3>
                 <p className="text-sm leading-5 text-gray-500 mb-4">
-                  Original Url: {selectedShortLink.longUrl}
+                  <span className="font-bold">Original Url: </span>{selectedShortLink.longUrl}
                   <br/>
-                  Short Url: {selectedShortLink.aliasUrl}
+                  <span className="font-bold">Short Url: </span>
+                  <a href={selectedShortLink.aliasUrl} className="text-blue-400">
+                    {selectedShortLink.aliasUrl}
+                  </a>
+                  <br/>
+                  <span className="font-bold">Created At: </span>{asRelativeTime(selectedShortLink.createdAt)}
+                  <br/>
+                  <span
+                    className="font-bold">Expire:</span> {selectedShortLink.expire > 0 ? (
+                  <span>{selectedShortLink.expire > Math.floor(new Date().getTime() / 1000.0) ? asFutureTime(selectedShortLink.expire) : (
+                    <span className="text-red-500">Expired</span>)}</span>
+                ) : "Not expire"}
                 </p>
                 <QRCodeCanvas value={selectedShortLink.aliasUrl}/>
               </>
@@ -60,7 +72,8 @@ const Modal = ({showModal, selectedShortLink, onClose}: Props) => {
         </div>
       </div>
     </div>
-  );
+  )
+    ;
 };
 
 export default Modal;

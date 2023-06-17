@@ -5,10 +5,9 @@ import React, {createContext, useContext, useEffect, useState} from "react";
 import axios from "axios";
 import apiUrl from "@/config/api";
 import toast from "react-hot-toast";
-import Router from "next/router";
-import ReactDOM from 'react-dom';
 import {QRCodeCanvas} from 'qrcode.react';
 import Modal from "@/ui/modal";
+import {configApi} from "@/config/configApi";
 
 interface shortlinkData {
   id: number;
@@ -40,34 +39,18 @@ const HomePage = () => {
     {key: 604800, value: '1 week'},
     {key: 2629743, value: '1 month'},
   ];
-  useEffect(() => {
-
-    setData([
-      {
-        "id": 6,
-        "longUrl": "231321123123132",
-        "aliasUrl": "xnfbsdo6av",
-        "password": "",
-        "status": 10,
-        "expire": 0,
-        "totalClick": 0,
-        "createdAt": 1686969171,
-        "createdBy": 0,
-        "updatedAt": 0
-      },
-      {
-        "id": 7,
-        "longUrl": "231321123123132",
-        "aliasUrl": "2321",
-        "password": "",
-        "status": 10,
-        "expire": 0,
-        "totalClick": 0,
-        "createdAt": 1686969486,
-        "createdBy": 0,
-        "updatedAt": 0
+  const fetchShortLink = async () => {
+    try {
+      const response = await axios.get(apiUrl + "shortlink", configApi);
+      if (response.status === 200) {
+        setData(response.data);
       }
-    ]);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    fetchShortLink();
   }, []);
   const validateForm = (): boolean => {
     if (longUrl.length < 5) {
@@ -103,7 +86,7 @@ const HomePage = () => {
       if (response.status === 201) {
         toast.success("Created ShortLink success");
         window.localStorage.setItem('accessToken', response.data.access_token)
-        await Router.push("/")
+        await fetchShortLink();
         setLongUrl("")
         setAliasUrl("")
         setPassword("")
@@ -174,7 +157,7 @@ const HomePage = () => {
             </div>
           </form>
           <>
-            <div className="my-3">
+            <div className="my-3 2xl:mx-48 md:mx-5 lg:mx-24">
               <div className="md:mb-5">
                 <h2 className="mb-4 text-xl font-bold text-gray-800 md:mb-6 lg:text-2xl">
                   My list ShortLink
