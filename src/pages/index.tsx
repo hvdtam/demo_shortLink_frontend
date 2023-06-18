@@ -150,7 +150,7 @@ const HomePage = () => {
               </div>
               <div className="w-full bg-white rounded-lg shadow-lg">
                 <ul className="divide-y-2 divide-gray-100">
-                  {data.map((item) => (
+                  {data.length > 0 ? data.map((item) => (
                     <li
                       key={item.id}
                       className="p-3 hover:bg-blue-400 hover:text-blue-200 rounded"
@@ -172,7 +172,19 @@ const HomePage = () => {
                         </div>
                       </div>
                     </li>
-                  ))}
+                  )) : (
+                    <>
+                      <div className="py-12">
+                        <div className="flex items-center justify-center">
+                          <div className="flex flex-col">
+                          <span className="text-xl text-gray-800">
+                            <span className="font-normal">No data</span>
+                          </span>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </ul>
               </div>
             </div>
