@@ -5,6 +5,7 @@ import Router from "next/router";
 const Logout = () => {
   useEffect(() => {
     window.localStorage.removeItem('accessToken')
+    window.localStorage.removeItem("shortlinkData");
     Router.push("/")
   })
   return (

@@ -34,6 +34,11 @@ const HomePage = () => {
       const response = await axios.get(apiUrl + "shortlink/?sortby=id&order=desc", configApi);
       if (response.status === 200) {
         setData(response.data);
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) {
+          const shortlinkData = JSON.stringify(response.data);
+          localStorage.setItem("shortlinkData", shortlinkData);
+        }
       } else {
         setData([]);
       }
