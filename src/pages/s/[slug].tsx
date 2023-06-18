@@ -2,8 +2,8 @@ import {useRouter} from 'next/router';
 import Link from "next/link";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import apiUrl from "@/config/api";
 import {configApi} from "@/config/configApi";
+import urlShortlink from "@/config/urlShortlink";
 
 interface IDataUrl {
   aliasUrl: string;
@@ -24,7 +24,7 @@ export default function Redirect() {
         if (!router.query.slug) {
           return;
         }
-        const response = await axios.get(apiUrl + "shortlink/" + router.query.slug, configApi);
+        const response = await axios.get(urlShortlink + router.query.slug, configApi);
         if (response.status === 200) {
           setStatus(200)
           setDataUrl(response.data);
@@ -116,11 +116,11 @@ export default function Redirect() {
                     The page you’re looking for doesn’t exist.
                   </p>
 
-                  <a
-                    href="#"
+                  <Link
+                    href="/"
                     className="inline-block rounded-lg bg-gray-200 px-8 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-300 focus-visible:ring active:text-gray-700 md:text-base">
                     Create a new link
-                  </a>
+                  </Link>
                 </div>
               </>
             )}
@@ -135,11 +135,11 @@ export default function Redirect() {
                     The page you’re looking for doesn’t exist.
                   </p>
 
-                  <a
-                    href="#"
+                  <Link
+                    href="/"
                     className="inline-block rounded-lg bg-gray-200 px-8 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-300 focus-visible:ring active:text-gray-700 md:text-base">
                     Create a new link
-                  </a>
+                  </Link>
                 </div>
               </>
             )}

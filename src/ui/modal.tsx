@@ -6,6 +6,7 @@ interface shortLinkData {
   id: number;
   longUrl: string;
   aliasUrl: string;
+  fullAliasUrl: string;
   password: string;
   status: number;
   expire: number;
@@ -50,12 +51,12 @@ const Modal = ({showModal, selectedShortLink, onClose}: Props) => {
                     <span className="text-red-500">Expired</span>)}</span>
                 ) : "Not expire"}
                 </p>
-                <QRCodeCanvas value={selectedShortLink.aliasUrl}/>
+                <QRCodeCanvas value={selectedShortLink.fullAliasUrl}/>
                 <br/>
                 <p style={{display: "flex", alignItems: "center"}}>
                   <span className="font-bold">Short Url: &nbsp;</span>
-                  <a href={selectedShortLink.aliasUrl} className="text-blue-400">
-                    {selectedShortLink.aliasUrl}
+                  <a href={selectedShortLink.fullAliasUrl} className="text-blue-400">
+                    {selectedShortLink.fullAliasUrl}
                   </a>
                   <button onClick={() => {
                     navigator.clipboard.writeText(selectedShortLink.aliasUrl).then(() => {
