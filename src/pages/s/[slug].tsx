@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 interface IDataUrl {
   aliasUrl: string;
-  longUrl: string;
+  originalUrl: string;
   status: string;
 }
 
@@ -69,7 +69,7 @@ export default function Redirect() {
         console.log(200)
 
         // @ts-ignore
-        window.location.replace(dataUrl.longUrl);
+        window.location.replace(dataUrl.originalUrl);
       }
     }, 5000);
     return () => clearTimeout(timeout);
@@ -96,7 +96,7 @@ export default function Redirect() {
                 <div className="flex w-full flex-col gap-2.5 sm:flex-row sm:justify-center">
                   <a
                     // @ts-ignore
-                    href={dataUrl.longUrl}
+                    href={dataUrl.originalUrl}
                     className="inline-block rounded-lg bg-blue-600 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-blue-300 transition duration-100 hover:bg-blue-700 focus-visible:ring active:bg-blue-800 md:text-base">
                     Start now
                   </a>

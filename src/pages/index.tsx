@@ -12,7 +12,7 @@ import {trimValue} from "@/helper/data";
 import {shortlinkData} from "@/models/interface/shortlink";
 
 const HomePage = () => {
-  const [longUrl, setLongUrl] = useState("");
+  const [originalUrl, setOriginalUrl] = useState("");
   const [aliasUrl, setAliasUrl] = useState("");
   const [password, setPassword] = useState("");
   const [expire, setExpire] = useState("");
@@ -52,11 +52,11 @@ const HomePage = () => {
     fetchShortLink();
   }, []);
   const validateForm = (): boolean => {
-    if (longUrl.length < 5) {
-      toast.error("Long link is too short");
+    if (originalUrl.length < 5) {
+      toast.error("Original link is too short");
       return false;
     }
-    if (longUrl.length > 250) {
+    if (originalUrl.length > 250) {
       toast.error("Original link is too long");
       return false;
     }
@@ -71,7 +71,7 @@ const HomePage = () => {
       const response = await axios.post(
         apiUrl + "shortlink",
         {
-          longUrl,
+          longUrl: originalUrl,
           aliasUrl,
           password,
           expire: parseInt(expire),
@@ -80,7 +80,7 @@ const HomePage = () => {
       if (response.status === 201) {
         toast.success("Created ShortLink success");
         await fetchShortLink();
-        setLongUrl("")
+        setOriginalUrl("")
         setAliasUrl("")
         setPassword("")
         setExpire("")
@@ -108,11 +108,11 @@ const HomePage = () => {
           <form className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-3" onSubmit={handleSubmit}>
             <div className="sm:col-span-3">
               <Field
-                label="Enter Long link"
-                attribute="longLink"
+                label="Enter Original link"
+                attribute="originalUrl"
                 required={true}
-                value={longUrl}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setLongUrl(trimValue(event.target.value))}
+                value={originalUrl}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setOriginalUrl(trimValue(event.target.value))}
               />
             </div>
             <div>

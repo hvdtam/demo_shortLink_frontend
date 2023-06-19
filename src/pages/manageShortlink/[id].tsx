@@ -12,7 +12,7 @@ import Router, {useRouter} from "next/router";
 
 const ManageShortlink = () => {
   const router = useRouter();
-  const [longUrl, setLongUrl] = useState("");
+  const [originalUrl, setOriginalUrl] = useState("");
   const [aliasUrl, setAliasUrl] = useState("");
   const [password, setPassword] = useState("");
   const [expire, setExpire] = useState("");
@@ -39,7 +39,7 @@ const ManageShortlink = () => {
         if (response.status === 200) {
           setStatus(200)
           setAliasUrl(response.data.aliasUrl)
-          setLongUrl(response.data.longUrl)
+          setOriginalUrl(response.data.longUrl)
         } else if (response.status === 401) {
           setStatus(401)
         }
@@ -54,11 +54,11 @@ const ManageShortlink = () => {
 
 
   const validateForm = (): boolean => {
-    if (longUrl.length < 5) {
+    if (originalUrl.length < 5) {
       toast.error("Long link is too short");
       return false;
     }
-    if (longUrl.length > 250) {
+    if (originalUrl.length > 250) {
       toast.error("Original link is too long");
       return false;
     }
@@ -71,9 +71,9 @@ const ManageShortlink = () => {
     }
     try {
       const response = await axios.put(
-        apiUrl + "shortlink/manage/" + aliasUrl,
+        apiUrl + "shortlink/" + aliasUrl,
         {
-          longUrl,
+          longUrl: originalUrl,
           aliasUrl,
           password,
           expire: parseInt(expire),
@@ -81,7 +81,7 @@ const ManageShortlink = () => {
       );
       if (response.status === 200) {
         toast.success("Updated ShortLink success");
-        setLongUrl("")
+        setOriginalUrl("")
         setAliasUrl("")
         setPassword("")
         setExpire("")
@@ -100,10 +100,10 @@ const ManageShortlink = () => {
             <div className="sm:col-span-3">
               <Field
                 label="Enter Long link"
-                attribute="longLink"
+                attribute="originalUrl"
                 required={true}
-                value={longUrl}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setLongUrl(trimValue(event.target.value))}
+                value={originalUrl}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setOriginalUrl(trimValue(event.target.value))}
               />
             </div>
             <div>
@@ -139,7 +139,7 @@ const ManageShortlink = () => {
             <div className="flex items-center justify-between sm:col-span-2">
               <button
                 className="inline-block rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">
-                Send
+                Update
               </button>
             </div>
           </form>

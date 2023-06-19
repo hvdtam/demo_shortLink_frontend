@@ -5,7 +5,8 @@ import Link from "next/link";
 
 interface shortLinkData {
   id: number;
-  longUrl: string;
+  longLink?: string;
+  originalUrl?: string;
   aliasUrl: string;
   fullAliasUrl: string;
   password: string;
@@ -42,7 +43,7 @@ const Modal = ({showModal, selectedShortLink, onClose}: Props) => {
               <>
                 <h3 className="text-lg leading-6 font-medium text-gray-900 mb-2">ShortLink details</h3>
                 <p className="text-sm leading-5 text-gray-500 mb-4">
-                  <span className="font-bold">Original Url: </span>{selectedShortLink.longUrl}
+                  <span className="font-bold">Original Url: </span>{selectedShortLink.originalUrl}
                   <br/>
                   <span className="font-bold">Created At: </span>{asRelativeTime(selectedShortLink.createdAt)}
                   <br/>

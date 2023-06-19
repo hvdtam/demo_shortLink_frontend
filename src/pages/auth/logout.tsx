@@ -1,12 +1,13 @@
 import Layout from "@/components/layout";
 import {useEffect} from "react";
-import Router from "next/router";
+import Router, {useRouter} from "next/router";
 
 const Logout = () => {
+  const router = useRouter();
   useEffect(() => {
     window.localStorage.removeItem('accessToken')
     window.localStorage.removeItem("shortlinkData");
-    Router.push("/")
+    router.push("/")
   })
   return (
     <Layout>
