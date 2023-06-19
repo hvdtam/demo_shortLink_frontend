@@ -31,11 +31,13 @@ const HomePage = () => {
 
   const fetchShortLink = async () => {
     try {
+      console.log(configApi)
       const response = await axios.get(apiUrl + "shortlink/?sortby=id&order=desc", configApi);
       if (response.status === 200) {
         setData(response.data);
         const accessToken = localStorage.getItem("accessToken");
         if (!accessToken) {
+          console.error("accessToken is null");
           const shortlinkData = JSON.stringify(response.data);
           localStorage.setItem("shortlinkData", shortlinkData);
         }
@@ -172,7 +174,7 @@ const HomePage = () => {
                               <span className="font-bold">Original Url: </span> {item.longUrl}
                             </span>
                             <span className="text-sm text-gray-800">
-                              <span className="font-bold">Short Url</span>: {item.aliasUrl}
+                              <span className="font-bold">Short Url: </span> {item.aliasUrl}
                             </span>
                           </div>
                         </div>

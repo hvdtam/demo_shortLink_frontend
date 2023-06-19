@@ -8,7 +8,7 @@ if (typeof window !== 'undefined') {
 
 export const configApi = {
   headers: {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer " + accessToken
-  }
+    'Content-Type': 'application/json',
+    ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+  },
 };
