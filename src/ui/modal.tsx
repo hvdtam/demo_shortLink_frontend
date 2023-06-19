@@ -1,6 +1,7 @@
 import {QRCodeCanvas} from "qrcode.react";
 import {asFutureTime, asRelativeTime} from "@/helper/date";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 interface shortLinkData {
   id: number;
@@ -53,17 +54,16 @@ const Modal = ({showModal, selectedShortLink, onClose}: Props) => {
                 </p>
                 <QRCodeCanvas value={selectedShortLink.fullAliasUrl}/>
                 <br/>
-                <p style={{display: "flex", alignItems: "center"}}>
+                <p className="items-center flex align break-all">
                   <span className="font-bold">Short Url: &nbsp;</span>
                   <a href={selectedShortLink.fullAliasUrl} className="text-blue-400">
                     {selectedShortLink.fullAliasUrl}
                   </a>
                   <button onClick={() => {
-                    navigator.clipboard.writeText(selectedShortLink.aliasUrl).then(() => {
+                    navigator.clipboard.writeText(selectedShortLink.fullAliasUrl).then(() => {
                       toast.success("Copied to clipboard");
                     })
-                  }}
-                          style={{marginLeft: "10px"}}>
+                  }} style={{marginLeft: "10px"}}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                          className="feather feather-copy">
@@ -85,12 +85,20 @@ const Modal = ({showModal, selectedShortLink, onClose}: Props) => {
                 Close
               </button>
             </span>
+            <span className="flex rounded-md shadow-sm sm:ml-3 sm:w-auto">
+              <Link
+                href={`/manageShortlink/${selectedShortLink?.aliasUrl}`}
+                type="button"
+                className="inline-flex justify-self-start w-full rounded-md border border-transparent px-4 py-2 bg-gray-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+              >
+                Edit
+              </Link>
+            </span>
           </div>
         </div>
       </div>
     </div>
-  )
-    ;
+  );
 };
 
 export default Modal;

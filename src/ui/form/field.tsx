@@ -7,11 +7,12 @@ type Props = {
   label?: string;
   type?: string;
   placeholder?: string;
+  disabled?: boolean;
   required?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Field = ({attribute, type, value, placeholder, label, required, onChange}: Props) => {
+const Field = ({attribute, type, value, placeholder, label, required, disabled,onChange}: Props) => {
   const requiredColor = 'red-500';
 
   return (
@@ -25,6 +26,7 @@ const Field = ({attribute, type, value, placeholder, label, required, onChange}:
       </label>
       <div className="relative">
         <input
+          disabled={disabled}
           value={value}
           type={type}
           placeholder={placeholder}

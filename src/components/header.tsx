@@ -76,11 +76,11 @@ const Header = () => {
                         + (showDropdown ? 'block' : 'hidden')}
                       role="menu">
                       <div className="p-2">
-                        <a href="#"
+                        <Link href="/manageShortlink"
                            className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                            role="menuitem">
                           Manage Shortlinks
-                        </a>
+                        </Link>
                       </div>
                       <div className="p-2">
                         <Link href="/auth/logout"
