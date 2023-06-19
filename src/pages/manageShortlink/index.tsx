@@ -28,7 +28,7 @@ const ManageShortlinkIndex = () => {
   }
   useEffect(() => {
     fetchShortLink();
-  },[]);
+  }, []);
   return (
     <>
       <Layout>
@@ -40,33 +40,39 @@ const ManageShortlinkIndex = () => {
                   My list ShortLink
                 </h2>
               </div>
-              <div className="w-full bg-white rounded-lg shadow-lg">
-                <ul className="divide-y-2 divide-gray-100">
-                  {data.length > 0 ? data.map((item) => (
-                    <Link href={{
-                      pathname: "/manageShortlink/[id]",
-                      query: {id: item.aliasUrl},
-                    }} key={item.id}>
-                      <li className="p-6 hover:bg-blue-400 hover:text-blue-200 rounded">
-                        <div className="flex items-center">
-                          <div className="flex-grow">
-                            <div className="flex flex-col">
+              {data.length > 0 ? data.map((item) => (
+                <>
+                  <div className="w-full bg-white rounded-lg shadow-lg">
+                    <ul className="divide-y-2 divide-gray-100" key={item.id}>
+                      <Link href={{
+                        pathname: "/manageShortlink/[id]",
+                        query: {id: item.aliasUrl},
+                      }}>
+                        <li className="p-6 hover:bg-blue-400 hover:text-blue-200 rounded">
+                          <div className="flex items-center">
+                            <div className="flex-grow">
+                              <div className="flex flex-col">
                             <span className="text-xs text-gray-500">
                               <span className="font-bold">Original Url: </span> {item.longUrl}
                             </span>
-                              <span className="text-sm text-gray-800">
+                                <span className="text-sm text-gray-800">
                               <span className="font-bold">Short Url</span>: {item.aliasUrl}
                             </span>
+                              </div>
+                            </div>
+                            <div className="flex justify-end">
+                              <QRCodeCanvas className="h-10 w-10" value={item.aliasUrl}/>
                             </div>
                           </div>
-                          <div className="flex justify-end">
-                            <QRCodeCanvas className="h-10 w-10" value={item.aliasUrl}/>
-                          </div>
-                        </div>
-                      </li>
-                    </Link>
-                  )) : (
-                    <>
+                        </li>
+                      </Link>
+                    </ul>
+                  </div>
+                </>
+              )) : (
+                <>
+                  <div className="w-full bg-white rounded-lg shadow-lg">
+                    <ul className="divide-y-2 divide-gray-100">
                       <div className="py-12">
                         <div className="flex items-center justify-center">
                           <div className="flex flex-col">
@@ -76,10 +82,10 @@ const ManageShortlinkIndex = () => {
                           </div>
                         </div>
                       </div>
-                    </>
-                  )}
-                </ul>
-              </div>
+                    </ul>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -83,8 +83,12 @@ const HomePage = () => {
         setPassword("")
         setExpire("")
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      if (error.response.status === 400) {
+        toast.error(error.response.data.message);
+      } else {
+        console.error(error);
+      }
     }
   };
   const handleCloseModal = () => {
@@ -154,7 +158,7 @@ const HomePage = () => {
                 </h2>
               </div>
               <div className="w-full bg-white rounded-lg shadow-lg">
-                <ul className="divide-y-2 divide-gray-100">
+                <ul className="divide-y-2 divide-gray-100 mb-4">
                   {data.length > 0 ? data.map((item) => (
                     <li
                       key={item.id}

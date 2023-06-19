@@ -1,9 +1,11 @@
 import {useRouter} from 'next/router';
 import Link from "next/link";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {configApi} from "@/config/configApi";
 import urlShortlink from "@/config/urlShortlink";
+import Field from "@/ui/form/field";
+import toast from "react-hot-toast";
 
 interface IDataUrl {
   aliasUrl: string;
@@ -15,27 +17,38 @@ export default function Redirect() {
   const [dataUrl, setDataUrl] = useState<IDataUrl[]>([]);
   const [countdown, setCountdown] = useState(5);
   const [status, setStatus] = useState(0);
+  const [password, setPassword] = useState("");
   const [redirected, setRedirected] = useState(false);
   const router = useRouter();
-
   useEffect(() => {
+    console.log(router.query.password)
     const fetchShortLink = async () => {
       try {
         if (!router.query.slug) {
           return;
         }
-        const response = await axios.get(urlShortlink + router.query.slug, configApi);
-        if (response.status === 200) {
-          setStatus(200)
-          setDataUrl(response.data);
+        if (router.query.password) {
+          const response = await axios.get(urlShortlink + router.query.slug + "/" + router.query.password, configApi);
+          if (response.status === 200) {
+            setStatus(200)
+            setDataUrl(response.data);
+          } else {
+            toast.error("Password is wrong")
+            setStatus(401)
+          }
+        } else {
+          const response = await axios.get(urlShortlink + router.query.slug, configApi);
+          if (response.status === 200) {
+            setStatus(200)
+            setDataUrl(response.data);
+          }
         }
       } catch (error: any) {
         if (error.response.status === 404) {
           setStatus(404)
-        } else if (error.response.status === 410) {
-          setStatus(410)
+        } else if (error.response.status === 401) {
+          setStatus(401)
         }
-        console.error(error);
       }
     };
     fetchShortLink().then(r => {
@@ -51,12 +64,16 @@ export default function Redirect() {
   }, []);
 
   useEffect(() => {
-    if (countdown === 0 && dataUrl.length > 0 && !redirected) {
-      setRedirected(true);
-      // @ts-ignore
-      window.location.href = dataUrl.longUrl;
-    }
-  }, [countdown, dataUrl, redirected]);
+    const timeout = setTimeout(() => {
+      if (status === 200) {
+        console.log(200)
+
+        // @ts-ignore
+        window.location.replace(dataUrl.longUrl);
+      }
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, [status]);
 
   return (
     <>
@@ -134,6 +151,37 @@ export default function Redirect() {
                   <p className="mb-12 max-w-screen-md text-center text-gray-500 md:text-lg">
                     The page you’re looking for doesn’t exist.
                   </p>
+
+                  <Link
+                    href="/"
+                    className="inline-block rounded-lg bg-gray-200 px-8 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-300 focus-visible:ring active:text-gray-700 md:text-base">
+                    Create a new link
+                  </Link>
+                </div>
+              </>
+            )}
+            {status === 401 && (
+              <>
+                <div className="flex flex-col items-center">
+                  <h1 className="mb-2 text-center text-2xl font-bold text-gray-800 md:text-3xl">
+                    Shortlink need authorization
+                  </h1>
+
+                  <p className="mb-4 max-w-screen-md text-center text-gray-500 md:text-lg">
+                    Please enter password to get link.
+                  </p>
+                  <form method="GET">
+                    <Field
+                      attribute="password"
+                      value={password}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)}
+                    />
+                    <button type={"submit"}
+                            className="mt-2 inline-block rounded-lg bg-blue-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-gray-300 focus-visible:ring active:text-gray-700 md:text-base">Encode
+                    </button>
+                  </form>
+
+                  <br/>
 
                   <Link
                     href="/"
