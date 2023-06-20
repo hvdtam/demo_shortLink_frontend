@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 
 interface shortLinkData {
+  longUrl?: string;
   id: number;
   longLink?: string;
   originalUrl?: string;
@@ -43,7 +44,7 @@ const Modal = ({showModal, selectedShortLink, onClose}: Props) => {
               <>
                 <h3 className="text-lg leading-6 font-medium text-gray-900 mb-2">ShortLink details</h3>
                 <p className="text-sm leading-5 text-gray-500 mb-4">
-                  <span className="font-bold">Original Url: </span>{selectedShortLink.originalUrl}
+                  <span className="font-bold">Original Url: </span>{selectedShortLink.longUrl}
                   <br/>
                   <span className="font-bold">Created At: </span>{asRelativeTime(selectedShortLink.createdAt)}
                   <br/>

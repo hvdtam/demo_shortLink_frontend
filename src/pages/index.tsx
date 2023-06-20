@@ -15,6 +15,7 @@ const HomePage = () => {
     const [originalUrl, setOriginalUrl] = useState("");
     const [aliasUrl, setAliasUrl] = useState("");
     const [password, setPassword] = useState("");
+    const [localData, setLocalData] = useState<shortlinkData[]>([]);
     const [expire, setExpire] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedShortLink, setSelectedShortLink] = useState<shortlinkData | null>(null);
@@ -35,15 +36,12 @@ const HomePage = () => {
         console.log(response.status)
         if (response.status === 200) {
           const accessToken = localStorage.getItem("accessToken");
-          console.error("accessToken is not null")
           if (accessToken !== null) {
             setData(response.data);
           }
         }
         if (response.status === 204) {
-          // const localData = localStorage.getItem('shortlinkLocal')
-          // const shortlinkLocal = JSON.parse(localData)
-          // localStorage.setItem("shortlinkLocal", JSON.stringify(shortlinkLocal));
+          // setData(localData);
         }
       } catch (error: any) {
         console.error(error);
@@ -69,9 +67,7 @@ const HomePage = () => {
         return;
       }
       try {
-        const response = await axios.post(
-          apiUrl + "shortlink",
-          {
+        const response = await axios.post(apiUrl + "shortlink", {
             longUrl: originalUrl,
             aliasUrl,
             password,
@@ -83,9 +79,10 @@ const HomePage = () => {
           await fetchShortLink();
           const accessToken = localStorage.getItem("accessToken");
           if (accessToken === null) {
-            // const shortlinkLocal = JSON.parse(localStorage.getItem('shortlinkLocal') || '')
-            // shortlinkLocal.push(response.data)
-            // localStorage.setItem("shortlinkLocal", JSON.stringify(shortlinkLocal));
+            const item = response.data;
+            const newArray = [...localData, item];
+            setLocalData(newArray);
+            localStorage.setItem("localData", JSON.stringify(localData));
           }
           setOriginalUrl("")
           setAliasUrl("")
@@ -99,6 +96,19 @@ const HomePage = () => {
         }
       }
     };
+    useEffect(() => {
+      if (localData.length > 0) {
+        console.log("localData.length>0", localData)
+        localStorage.setItem("localData", JSON.stringify(localData));
+        setData(localData);
+      } else {
+        console.log("localData.length=0", localData)
+        const localStorageData = localStorage.getItem("localData");
+        if (localStorageData) {
+          setLocalData(JSON.parse(localStorageData));
+        }
+      }
+    }, [localData]);
     const handleCloseModal = () => {
       setShowModal(false);
       setSelectedShortLink(null);
