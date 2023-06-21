@@ -15,7 +15,7 @@ export const asRelativeTime = (timestamp: number) => {
     return `${days} days ago`;
   } else {
     const date = new Date(timestamp);
-    const month = date.toLocaleString('default', {month: 'long'});
+    const month = date.toLocaleString("default", { month: "long" });
     const year = date.getFullYear();
     return `${month} ${year}`;
   }
