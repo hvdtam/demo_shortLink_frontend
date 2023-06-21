@@ -3,7 +3,6 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { configApi } from "@/config/configApi";
-import urlShortlink from "@/config/urlShortlink";
 import Field from "@/ui/form/field";
 import toast from "react-hot-toast";
 
@@ -15,6 +14,8 @@ interface IDataUrl {
 
 export default function Redirect() {
   const [dataUrl, setDataUrl] = useState<IDataUrl[]>([]);
+  const shortLinkAPI =
+    process.env.API_SHORTLINK_URL ?? "http://localhost:8082/v1/shortlink/";
   const [countdown, setCountdown] = useState(5);
   const [status, setStatus] = useState(0);
   const [password, setPassword] = useState("");
@@ -29,7 +30,7 @@ export default function Redirect() {
         }
         if (router.query.password) {
           const response = await axios.get(
-            urlShortlink + router.query.slug + "/" + router.query.password,
+            shortLinkAPI + router.query.slug + "/" + router.query.password,
             configApi
           );
           if (response.status === 200) {
@@ -41,7 +42,7 @@ export default function Redirect() {
           }
         } else {
           const response = await axios.get(
-            urlShortlink + router.query.slug,
+            shortLinkAPI + router.query.slug,
             configApi
           );
           if (response.status === 200) {

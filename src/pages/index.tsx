@@ -3,7 +3,6 @@ import Field from "@/ui/form/field";
 import Dropdown from "@/ui/form/dropdown";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import apiUrl from "@/config/api";
 import toast from "react-hot-toast";
 import { QRCodeCanvas } from "qrcode.react";
 import Modal from "@/ui/modal";
@@ -15,6 +14,7 @@ const HomePage = () => {
   const [originalUrl, setOriginalUrl] = useState("");
   const [aliasUrl, setAliasUrl] = useState("");
   const [password, setPassword] = useState("");
+  const apiUrl = process.env.API_URL;
   const [localData, setLocalData] = useState<shortlinkData[]>([]);
   const [expire, setExpire] = useState("");
   const [showModal, setShowModal] = useState(false);

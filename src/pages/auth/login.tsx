@@ -4,7 +4,6 @@ import Link from "next/link";
 import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import apiUrl from "@/config/api";
 import { trimValue } from "@/helper/data";
 import Router from "next/router";
 
@@ -15,7 +14,7 @@ const Login = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        apiUrl + "/user/login",
+        process.env.API_URL + "/user/login",
         {
           username,
           password,

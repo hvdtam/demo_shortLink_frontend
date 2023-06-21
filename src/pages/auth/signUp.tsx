@@ -4,7 +4,6 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import apiUrl from "@/config/api";
 import Router from "next/router";
 import { trimValue } from "@/helper/data";
 const Login = () => {
@@ -39,7 +38,7 @@ const Login = () => {
     }
     try {
       const response = await axios.post(
-        apiUrl + "user/register",
+        process.env.API_URL + "user/register",
         {
           username,
           password,

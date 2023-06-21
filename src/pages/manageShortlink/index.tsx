@@ -2,13 +2,13 @@ import Layout from "@/components/layout";
 import React, { useEffect, useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import axios from "axios";
-import apiUrl from "@/config/api";
 import { configApi } from "@/config/configApi";
 import { shortlinkData } from "@/models/interface/shortlink";
 import Link from "next/link";
 
 const ManageShortlinkIndex = () => {
   const [data, setData] = useState<shortlinkData[]>([]);
+  const apiUrl = process.env.API_URL;
   const fetchShortLink = async () => {
     try {
       const response = await axios.get(

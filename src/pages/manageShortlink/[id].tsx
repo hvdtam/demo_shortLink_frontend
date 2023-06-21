@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { shortlinkData } from "@/models/interface/shortlink";
 import axios from "axios";
-import apiUrl from "@/config/api";
 import { configApi } from "@/config/configApi";
 import toast from "react-hot-toast";
 import Field from "@/ui/form/field";
@@ -35,7 +34,7 @@ const ManageShortlink = () => {
           return;
         }
         const response = await axios.get(
-          apiUrl + "shortlink/manager/" + router.query.id,
+          process.env.API_URL + "shortlink/manager/" + router.query.id,
           configApi
         );
         if (response.status === 200) {
@@ -72,7 +71,7 @@ const ManageShortlink = () => {
     }
     try {
       const response = await axios.put(
-        apiUrl + "shortlink/" + aliasUrl,
+        process.env.API_URL + "shortlink/" + aliasUrl,
         {
           longUrl: originalUrl,
           aliasUrl,
