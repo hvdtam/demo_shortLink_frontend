@@ -1,6 +1,6 @@
-let accessToken = '';
-if (typeof window !== 'undefined') {
-  let storage = window.localStorage.getItem('accessToken');
+let accessToken = "";
+if (typeof window !== "undefined") {
+  let storage = window.localStorage.getItem("accessToken");
   if (storage !== null) {
     accessToken = storage;
   }
@@ -8,7 +8,7 @@ if (typeof window !== 'undefined') {
 
 export const configApi = {
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
   },
 };

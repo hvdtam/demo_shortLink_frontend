@@ -1,11 +1,11 @@
-import {inDevEnvironment} from './env';
+import { inDevEnvironment } from "./env";
 
-let apiUrl = ""
-const urlDev = "http://localhost:8082/v1/"
-const urlProd = "https://s.tamk.dev/"
+let apiUrl = "";
+const urlDev = "http://localhost:8082/v1/";
+const urlProd = "https://s.tamk.dev/";
 if (inDevEnvironment) {
-  apiUrl = urlDev
+  apiUrl = urlDev;
 } else {
-  apiUrl = urlProd
+  apiUrl = urlProd;
 }
-export default apiUrl
+export default apiUrl;
