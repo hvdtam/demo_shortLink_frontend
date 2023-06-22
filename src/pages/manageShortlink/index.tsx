@@ -12,7 +12,7 @@ const ManageShortlinkIndex = () => {
   const fetchShortLink = async () => {
     try {
       const response = await axios.get(
-        apiUrl + "shortlink/?sortby=id&order=desc",
+        apiUrl + "shortlink/all?sortby=id&order=desc",
         configApi
       );
       if (response.status === 200) {
