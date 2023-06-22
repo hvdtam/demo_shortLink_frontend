@@ -55,6 +55,8 @@ export default function Redirect() {
           setStatus(404);
         } else if (error.response.status === 401) {
           setStatus(401);
+        } else if (error.response.status === 410) {
+          setStatus(410);
         }
       }
     };

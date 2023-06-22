@@ -5,7 +5,7 @@ type Props = {
   attribute: string;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   label?: string;
-  defaultValue: string;
+  defaultValue?: string;
   options: { key: any; value: any }[];
   required?: boolean;
 };
@@ -32,7 +32,7 @@ const Dropdown = ({
       <div className="relative">
         <select
           className="h-10 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
-          value={defaultValue}
+          defaultValue={defaultValue}
           onChange={onChange}
         >
           <option>{defaultValue}</option>
